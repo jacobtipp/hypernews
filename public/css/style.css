@@ -1,0 +1,171 @@
+* {
+  padding: 0;
+  margin: 0;
+  font-family: arial;
+}
+
+body {
+  background: #f2f3f5;
+}
+
+.hide {
+  display: none;
+}
+
+header {
+  position: fixed;
+  background: #f2f3f5;
+  top: 0;
+  left: 0;
+  z-index: 999;
+  width: 100%;
+  height: 47px;
+  border-bottom: 5px solid red;
+}
+
+header nav {
+  padding: 15px;
+}
+
+.centered {
+  max-width: 800px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+nav a {
+  position: relative;
+  margin-right: 3em;
+  text-decoration: none;
+  color: red;
+}
+
+nav a.active {
+  font-weight: 800;
+}
+
+nav a.active:before, nav a.active:after {
+  content: '';
+  position: absolute;
+  top: 28px;
+  left: 25%;
+  border: 5px solid transparent;
+  border-bottom-color: #f2f3f5;
+  z-index: 999;
+}
+
+nav a.active:after {
+  border: 10px solid transparent;
+  border-bottom-color: red;
+  top: 17px;
+  left: calc(-5px + 25%);
+  z-index: 1;
+}
+
+main.centered {
+  position: relative;
+  padding: 0;
+  margin-bottom: 3em;
+  top: 52px;
+}
+
+main > div {
+  background: white;
+}
+
+main ul {
+  list-style: none;
+}
+
+main ul li {
+  position: relative;
+  min-height: 70px;
+  padding: 1em 2em 1em 4em;
+  box-sizing: border-box;
+  border-bottom: 1px solid #f2f3f5;
+}
+
+main ul li:last-child {
+  border-bottom: none;
+}
+
+main ul li a {
+  color: black;
+}
+
+main ul li span {
+  margin-right: 1em;
+}
+
+.index {
+  position: absolute;
+  width: 4em;
+  color: red;
+  font-weight: 600;
+  left: 0;
+  top: 50%;
+  margin-top: -10px;
+  text-align: center;
+}
+
+.score, .by, .comment-link {
+  font-size: 0.75em;
+}
+
+.comment-link a {
+  color: #999;
+}
+
+.more {
+  display: inline-block;
+  margin-top: 1em;
+  width: 100%;
+}
+
+.more a {
+  box-sizing: border-box;
+  padding: 1em;
+  background: white;
+  text-decoration: none;
+  color: red;
+  font-weight: 800;
+}
+
+.loading,
+.loading:after {
+  border-radius: 50%;
+  width: 5em;
+  height: 5em;
+}
+
+.loading {
+  position: absolute;
+  top: calc(50vh - 77px - 5em);
+  left: calc(50% - 2.5em);
+  font-size: 10px;
+  text-indent: -9999em;
+  border-top: 1.1em solid red;
+  border-right: 1.1em solid rgba(255, 0, 0, 0.2);
+  border-bottom: 1.1em solid rgba(255, 0, 0, 0.2);
+  border-left: 1.1em solid rgba(255, 0, 0, 0.2);
+  animation: load8 1.1s infinite linear;
+}
+
+@-webkit-keyframes load8 {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes load8 {
+  0% {
+    transform: rotate(0deg);
+
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
