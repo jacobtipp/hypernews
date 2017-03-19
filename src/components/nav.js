@@ -1,5 +1,5 @@
 const { h } = require('hyperapp')
-const NavLink = require('./navLink')
+const NavLink = require('./navlink')
 const links = ['top', 'new', 'show', 'ask', 'jobs']
 
 const Nav = module.exports = ({ actions, type }) => {

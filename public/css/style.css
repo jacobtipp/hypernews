@@ -19,18 +19,17 @@ header {
   left: 0;
   z-index: 999;
   width: 100%;
-  height: 47px;
   border-bottom: 5px solid red;
-}
-
-header nav {
-  padding: 15px;
 }
 
 .centered {
   max-width: 800px;
   margin: 0 auto;
   box-sizing: border-box;
+}
+
+nav {
+  padding: 1em 0;
 }
 
 nav a {
@@ -47,7 +46,7 @@ nav a.active {
 nav a.active:before, nav a.active:after {
   content: '';
   position: absolute;
-  top: 28px;
+  top: 2.1em;
   left: 25%;
   border: 5px solid transparent;
   border-bottom-color: #f2f3f5;
@@ -57,7 +56,7 @@ nav a.active:before, nav a.active:after {
 nav a.active:after {
   border: 10px solid transparent;
   border-bottom-color: red;
-  top: 17px;
+  top: 1.4em;
   left: calc(-5px + 25%);
   z-index: 1;
 }
@@ -66,7 +65,7 @@ main.centered {
   position: relative;
   padding: 0;
   margin-bottom: 3em;
-  top: 52px;
+  top: calc(4em - 5px);
 }
 
 main > div {

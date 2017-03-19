@@ -4,8 +4,8 @@
   "description": "hacker news implementation with hyperapp",
   "main": "index.js",
   "scripts": {
-    "serve": "pushstate-server public 8080",
-    "watch": "watchify -p [ browserify-livereload --port 9090 ] -t babelify src/main.js -o public/bundle.js -v",
+    "serve": "pushstate-server public 8010",
+    "watch": "watchify -p [ browserify-livereload --host 192.168.29.236 --port 9090 ] -t babelify src/main.js -o public/bundle.js -v",
     "dev": "npm run serve & npm run watch"
   },
   "keywords": [
@@ -28,6 +28,7 @@
     "babel-plugin-transform-react-jsx": "^6.23.0",
     "babelify": "^7.3.0",
     "browserify": "^14.1.0",
+    "browserify-livereload": "^1.0.9",
     "http-server": "^0.9.0"
   }
 }
