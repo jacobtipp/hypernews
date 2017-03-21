@@ -19,7 +19,7 @@
     "classnames": "^2.2.5",
     "fetch": "^1.1.0",
     "firebase": "^3.6.10",
-    "hyperapp": "^0.7.0",
+    "hyperapp": "^0.7.1",
     "lscache": "^1.1.0",
     "memory-cache": "^0.1.6",
     "pushstate-server": "^2.2.1"

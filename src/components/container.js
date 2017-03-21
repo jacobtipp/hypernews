@@ -4,7 +4,10 @@ const classnames = require('classnames')
 
 const Container = module.exports = ({ loading, actions, type }, children) => (
   <div class='container'>
-    <Nav actions={actions} type={type} />
+    <Nav 
+      loading={loading} 
+      actions={actions} 
+      type={type} />
     {children}
   </div>
 )

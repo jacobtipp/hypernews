@@ -5,8 +5,9 @@ const reducers = module.exports = {
     loading: !model.loading
   }),
 
-  updateItems: (model, { type, items }) => ({
-    items: Object.assign({}, model.items, { [type]: items })
+  updateIdsandItems: (model, { type, items, ids }) => ({
+    ids: Object.assign({}, model.ids, { [type]: ids }),
+    items: Object.assign({}, model.items, items)
   }),
 
   fetchItems: (model, { type, ids }, actions) => {
@@ -14,8 +15,14 @@ const reducers = module.exports = {
 
     return Promise.all(items)
       .then(items => {
-        items = items.filter(item => !!item)
-        return { type, items }
+        items = items.reduce((a, b) => {
+          if (b) {
+            a[b.id] = b
+          }
+          return a
+        }, {})
+        ids = ids.filter(id => items[id])
+        return { type, items, ids }
       })
   },
 
@@ -25,27 +32,23 @@ const reducers = module.exports = {
     })
   }),
 
-  fetchStory: (model, type) => new Promise(resolve => {
+  fetchStory: (model, type, actions) => new Promise(resolve => {
     database.child(`${type}stories`).once('value', snapshot => {
       const ids = snapshot.val()
       resolve({ type, ids })
     })
   }),
 
-  fetchStories: (model, type, actions) => {
-    return actions.fetchStory(type)
-      .then(actions.fetchItems)
-  },
-
-  subscribeStories: (model, _, actions) => {
-    const stories = ['top', 'new', 'show', 'ask', 'job']
+  fetchIds: ({ ids, loading }, type, actions) => {
+    if (loading || ids[type].length) {
+      return 
+    }
 
     actions.toggleLoading()
-    Promise.all(stories.map(actions.fetchStories))
-      .then(items => {
-        items.forEach(item => {
-          actions.updateItems(item)
-        })
+    actions.fetchStory(type)
+      .then(actions.fetchItems)
+      .then(_ => {
+        actions.updateIdsandItems(_)
         actions.toggleLoading()
       })
   }

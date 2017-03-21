@@ -5,10 +5,11 @@ const listView = module.exports = (type) => (model, actions) => {
   return (
     <Stories
       loading={model.loading}
-      items={model.items[type]}
       actions={actions}
       page={+model.router.params.page || 1}
       type={type}
+      ids={model.ids[type]}
+      items={model.items}
     />
   )
 }

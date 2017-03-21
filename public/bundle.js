@@ -758,11 +758,13 @@ var reducers = module.exports = {
     };
   },
 
-  updateItems: function updateItems(model, _ref) {
+  updateIdsandItems: function updateIdsandItems(model, _ref) {
     var type = _ref.type,
-        items = _ref.items;
+        items = _ref.items,
+        ids = _ref.ids;
     return {
-      items: Object.assign({}, model.items, _defineProperty({}, type, items))
+      ids: Object.assign({}, model.ids, _defineProperty({}, type, ids)),
+      items: Object.assign({}, model.items, items)
     };
   },
 
@@ -773,10 +775,16 @@ var reducers = module.exports = {
     var items = ids.map(actions.fetchItem);
 
     return Promise.all(items).then(function (items) {
-      items = items.filter(function (item) {
-        return !!item;
+      items = items.reduce(function (a, b) {
+        if (b) {
+          a[b.id] = b;
+        }
+        return a;
+      }, {});
+      ids = ids.filter(function (id) {
+        return items[id];
       });
-      return { type: type, items: items };
+      return { type: type, items: items, ids: ids };
     });
   },
 
@@ -788,7 +796,7 @@ var reducers = module.exports = {
     });
   },
 
-  fetchStory: function fetchStory(model, type) {
+  fetchStory: function fetchStory(model, type, actions) {
     return new Promise(function (resolve) {
       database.child(type + 'stories').once('value', function (snapshot) {
         var ids = snapshot.val();
@@ -797,18 +805,17 @@ var reducers = module.exports = {
     });
   },
 
-  fetchStories: function fetchStories(model, type, actions) {
-    return actions.fetchStory(type).then(actions.fetchItems);
-  },
+  fetchIds: function fetchIds(_ref3, type, actions) {
+    var ids = _ref3.ids,
+        loading = _ref3.loading;
 
-  subscribeStories: function subscribeStories(model, _, actions) {
-    var stories = ['top', 'new', 'show', 'ask', 'job'];
+    if (loading || ids[type].length) {
+      return;
+    }
 
     actions.toggleLoading();
-    Promise.all(stories.map(actions.fetchStories)).then(function (items) {
-      items.forEach(function (item) {
-        actions.updateItems(item);
-      });
+    actions.fetchStory(type).then(actions.fetchItems).then(function (_) {
+      actions.updateIdsandItems(_);
       actions.toggleLoading();
     });
   }
@@ -830,7 +837,10 @@ var Container = module.exports = function (_ref, children) {
   return h(
     'div',
     { 'class': 'container' },
-    h(Nav, { actions: actions, type: type }),
+    h(Nav, {
+      loading: loading,
+      actions: actions,
+      type: type }),
     children
   );
 };
@@ -903,20 +913,23 @@ var More = require('./more');
 var classnames = require('classnames');
 
 var Items = module.exports = function (_ref) {
-  var actions = _ref.actions,
+  var items = _ref.items,
+      ids = _ref.ids,
+      actions = _ref.actions,
       type = _ref.type,
       page = _ref.page,
-      items = _ref.items,
       loading = _ref.loading;
 
   var limit = 30;
   var max = page * limit;
   var min = max - limit;
-  var sliced = items.slice(min, max);
+  var sliced = ids.slice(min, max);
 
   return h(
     'main',
-    {
+    { onCreate: function onCreate() {
+        return actions.fetchIds(type);
+      },
       'class': 'centered' },
     h(
       'div',
@@ -924,10 +937,10 @@ var Items = module.exports = function (_ref) {
       h(
         'ul',
         null,
-        sliced.map(function (item, i) {
+        sliced.map(function (id, i) {
           return h(Item, {
             index: i,
-            item: item,
+            item: items[id],
             page: page
           });
         })
@@ -983,7 +996,8 @@ var NavLink = require('./navlink');
 var links = ['top', 'new', 'show', 'ask', 'jobs'];
 
 var Nav = module.exports = function (_ref) {
-  var actions = _ref.actions,
+  var loading = _ref.loading,
+      actions = _ref.actions,
       type = _ref.type;
 
   return h(
@@ -994,9 +1008,12 @@ var Nav = module.exports = function (_ref) {
       { 'class': 'centered' },
       links.map(function (story) {
         return h(NavLink, {
-          actions: actions,
+          type: type,
           name: story,
-          active: type === story || type + 's' === story });
+          actions: actions,
+          loading: loading,
+          active: type + 's' === story || story === type
+        });
       })
     )
   );
@@ -1010,26 +1027,34 @@ var _require = require('hyperapp'),
 
 var navLink = module.exports = function (_ref) {
   var loading = _ref.loading,
-      actions = _ref.actions,
       active = _ref.active,
-      name = _ref.name;
+      name = _ref.name,
+      type = _ref.type,
+      actions = _ref.actions;
 
-  var parsedName = '' + name[0].toLowerCase() + name.slice(1);
+  var onClick = function onClick(e) {
+    e.preventDefault();
+
+    if (loading) {
+      return;
+    }
+
+    actions.router.go('/' + name);
+
+    if (name === 'jobs') {
+      name = 'job';
+    }
+
+    actions.fetchIds(name);
+    window.scrollTo(0, 0);
+  };
+
   return h(
     'a',
     {
+      href: '/' + name,
       'class': active && 'active',
-      href: '/' + parsedName,
-      onclick: function onclick(e) {
-        e.preventDefault();
-
-        if (loading) {
-          return false;
-        }
-
-        actions.router.go('/' + parsedName + '/1');
-        window.scrollTo(0, 0);
-      }
+      onclick: onClick
     },
     '' + name[0].toUpperCase() + name.slice(1)
   );
@@ -1045,20 +1070,22 @@ var Container = require('./container');
 var Items = require('./items');
 
 var Stories = module.exports = function (_ref) {
-  var type = _ref.type,
+  var items = _ref.items,
+      ids = _ref.ids,
+      type = _ref.type,
       page = _ref.page,
       actions = _ref.actions,
-      loading = _ref.loading,
-      items = _ref.items;
+      loading = _ref.loading;
   return h(
     Container,
     { loading: loading, actions: actions, type: type },
     h(Items, {
       loading: loading,
-      items: items,
       page: page,
       type: type,
-      actions: actions
+      actions: actions,
+      ids: ids,
+      items: items
     })
   );
 };
@@ -1087,12 +1114,12 @@ var _require = require('hyperapp'),
 var subscriptions = require('./subscriptions');
 var actions = require('./actions');
 var view = require('./views');
-console.log('test');
 
 app({
   model: {
     loading: false,
-    items: {
+    items: {},
+    ids: {
       top: [],
       new: [],
       show: [],
@@ -1108,10 +1135,19 @@ app({
 });
 
 },{"./actions":9,"./subscriptions":19,"./views":20,"hyperapp":8}],19:[function(require,module,exports){
-"use strict";
+'use strict';
 
 var subscriptions = module.exports = [function (model, actions) {
-  actions.subscribeStories();
+  window.addEventListener('popstate', function (e) {
+    var re = /new|job|ask|show|top|item/;
+    var match = window.location.pathname.match(re);
+
+    if (!match) {
+      actions.fetchIds('top');
+    } else {
+      actions.fetchIds(match[0]);
+    }
+  });
 }];
 
 },{}],20:[function(require,module,exports){
@@ -1155,10 +1191,11 @@ var listView = module.exports = function (type) {
   return function (model, actions) {
     return h(Stories, {
       loading: model.loading,
-      items: model.items[type],
       actions: actions,
       page: +model.router.params.page || 1,
-      type: type
+      type: type,
+      ids: model.ids[type],
+      items: model.items
     });
   };
 };

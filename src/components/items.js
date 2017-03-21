@@ -3,21 +3,21 @@ const Item = require('./item')
 const More = require('./more')
 const classnames = require('classnames')
 
-const Items = module.exports = ({ actions, type, page, items, loading }) => {
+const Items = module.exports = ({ items, ids, actions, type, page, loading }) => {
   const limit = 30
   const max = page * limit
   const min = max - limit
-  const sliced = items.slice(min, max)
+  const sliced = ids.slice(min, max)
 
   return (
-    <main
+    <main onCreate={() => actions.fetchIds(type)}
       class='centered'>
       <div class={classnames({ hide: loading })}>
         <ul>
-          {sliced.map((item, i)=> (
+          {sliced.map((id, i)=> (
             <Item
               index={i}
-              item={item}
+              item={items[id]}
               page={page}
             />
             ))}
@@ -29,7 +29,7 @@ const Items = module.exports = ({ actions, type, page, items, loading }) => {
               actions={actions} 
               type={type}
             />}
-          <div class={classnames({ loading })}></div>
+            {<div class={classnames({ loading })}></div>}
         </main>
   )
 }
