@@ -758,12 +758,16 @@ var reducers = module.exports = {
     };
   },
 
-  updateIdsandItems: function updateIdsandItems(model, _ref) {
-    var type = _ref.type,
-        items = _ref.items,
-        ids = _ref.ids;
+  updateIds: function updateIds(model, _ref) {
+    var ids = _ref.ids,
+        type = _ref.type;
     return {
-      ids: Object.assign({}, model.ids, _defineProperty({}, type, ids)),
+      ids: Object.assign({}, model.ids, _defineProperty({}, type, ids))
+    };
+  },
+
+  updateItems: function updateItems(model, items) {
+    return {
       items: Object.assign({}, model.items, items)
     };
   },
@@ -809,13 +813,18 @@ var reducers = module.exports = {
     var ids = _ref3.ids,
         loading = _ref3.loading;
 
-    if (loading || ids[type].length) {
+    if (loading) {
       return;
     }
 
     actions.toggleLoading();
-    actions.fetchStory(type).then(actions.fetchItems).then(function (_) {
-      actions.updateIdsandItems(_);
+    actions.fetchStory(type).then(actions.fetchItems).then(function (_ref4) {
+      var items = _ref4.items,
+          type = _ref4.type,
+          ids = _ref4.ids;
+
+      actions.updateItems(items);
+      actions.updateIds({ type: type, ids: ids });
       actions.toggleLoading();
     });
   }
@@ -946,7 +955,7 @@ var Items = module.exports = function (_ref) {
         })
       )
     ),
-    sliced.length === limit && h(More, {
+    !loading && sliced.length === limit && h(More, {
       page: page,
       actions: actions,
       type: type

@@ -5,8 +5,11 @@ const reducers = module.exports = {
     loading: !model.loading
   }),
 
-  updateIdsandItems: (model, { type, items, ids }) => ({
-    ids: Object.assign({}, model.ids, { [type]: ids }),
+  updateIds: (model, { ids, type } ) => ({
+    ids: Object.assign({}, model.ids, { [type]: ids })
+  }),
+
+  updateItems: (model, items) => ({
     items: Object.assign({}, model.items, items)
   }),
 
@@ -40,15 +43,16 @@ const reducers = module.exports = {
   }),
 
   fetchIds: ({ ids, loading }, type, actions) => {
-    if (loading || ids[type].length) {
+    if (loading) {
       return 
     }
 
     actions.toggleLoading()
     actions.fetchStory(type)
       .then(actions.fetchItems)
-      .then(_ => {
-        actions.updateIdsandItems(_)
+      .then(({ items, type, ids }) => {
+        actions.updateItems(items)
+        actions.updateIds({ type, ids })
         actions.toggleLoading()
       })
   }

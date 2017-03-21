@@ -23,7 +23,7 @@ const Items = module.exports = ({ items, ids, actions, type, page, loading }) =>
             ))}
           </ul>
           </div>
-          {(sliced.length === limit) && 
+          {(!loading && sliced.length === limit) && 
             <More 
               page={page} 
               actions={actions} 
