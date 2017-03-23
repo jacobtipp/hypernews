@@ -772,10 +772,7 @@ var reducers = module.exports = {
     };
   },
 
-  fetchItems: function fetchItems(model, _ref2, actions) {
-    var type = _ref2.type,
-        ids = _ref2.ids;
-
+  fetchItems: function fetchItems(model, ids, actions) {
     var items = ids.map(actions.fetchItem);
 
     return Promise.all(items).then(function (items) {
@@ -785,10 +782,7 @@ var reducers = module.exports = {
         }
         return a;
       }, {});
-      ids = ids.filter(function (id) {
-        return items[id];
-      });
-      return { type: type, items: items, ids: ids };
+      return items;
     });
   },
 
@@ -804,29 +798,41 @@ var reducers = module.exports = {
     return new Promise(function (resolve) {
       database.child(type + 'stories').once('value', function (snapshot) {
         var ids = snapshot.val();
-        resolve({ type: type, ids: ids });
+
+        actions.fetchItems(ids).then(function (items) {
+          actions.updateItems(items);
+          actions.updateIds({ type: type, ids: ids.filter(function (id) {
+              return items[id];
+            }) });
+          resolve();
+        });
       });
     });
   },
 
-  fetchIds: function fetchIds(_ref3, type, actions) {
-    var ids = _ref3.ids,
-        loading = _ref3.loading;
+  fetchComments: function fetchComments(model, item, actions) {
+    if (item.kids) {
+      return actions.fetchItems(item.kids).then(function (items) {
+        actions.updateItems(items);
+        return items;
+      }).then(function (items) {
+        return Promise.all(item.kids.map(function (id) {
+          return actions.fetchComments(items[id]);
+        }));
+      });
+    }
+  },
+
+  fetchIds: function fetchIds(_ref2, type, actions) {
+    var ids = _ref2.ids,
+        loading = _ref2.loading;
 
     if (loading) {
       return;
     }
 
     actions.toggleLoading();
-    actions.fetchStory(type).then(actions.fetchItems).then(function (_ref4) {
-      var items = _ref4.items,
-          type = _ref4.type,
-          ids = _ref4.ids;
-
-      actions.updateItems(items);
-      actions.updateIds({ type: type, ids: ids });
-      actions.toggleLoading();
-    });
+    actions.fetchStory(type).then(actions.toggleLoading);
   }
 };
 
@@ -837,7 +843,6 @@ var _require = require('hyperapp'),
     h = _require.h;
 
 var Nav = require('./nav');
-var classnames = require('classnames');
 
 var Container = module.exports = function (_ref, children) {
   var loading = _ref.loading,
@@ -854,18 +859,28 @@ var Container = module.exports = function (_ref, children) {
   );
 };
 
-},{"./nav":14,"classnames":1,"hyperapp":8}],11:[function(require,module,exports){
+},{"./nav":14,"hyperapp":8}],11:[function(require,module,exports){
 'use strict';
 
 var _require = require('hyperapp'),
     h = _require.h;
 
 var Item = module.exports = function (_ref) {
-  var page = _ref.page,
+  var actions = _ref.actions,
+      page = _ref.page,
       item = _ref.item,
       index = _ref.index;
 
   index = page * 30 - 30 + ++index;
+
+  var onClick = function onClick(e) {
+    e.preventDefault();
+
+    actions.toggleLoading();
+    actions.router.go('/item/' + item.id);
+    actions.fetchItem(item.id).then(actions.fetchComments).then(actions.toggleLoading);
+  };
+
   return h(
     'li',
     null,
@@ -903,7 +918,8 @@ var Item = module.exports = function (_ref) {
       h(
         'a',
         {
-          href: '/item/' + item.id
+          href: '/item/' + item.id,
+          onclick: onClick
         },
         item.hasOwnProperty('descendants') && 'comments: ' + item.descendants
       )
@@ -950,7 +966,8 @@ var Items = module.exports = function (_ref) {
           return h(Item, {
             index: i,
             item: items[id],
-            page: page
+            page: page,
+            actions: actions
           });
         })
       )
@@ -1166,6 +1183,7 @@ var _require = require('hyperapp'),
     h = _require.h;
 
 var listView = require('./listView');
+var itemView = require('./itemView');
 
 var views = module.exports = {
   '/': listView('top'),
@@ -1179,6 +1197,7 @@ var views = module.exports = {
   '/ask/:page': listView('ask'),
   '/jobs': listView('job'),
   '/jobs/:page': listView('job'),
+  '/item/:id': itemView,
   '*': function _(model, actions) {
     return h(
       'div',
@@ -1188,7 +1207,43 @@ var views = module.exports = {
   }
 };
 
-},{"./listView":21,"hyperapp":8}],21:[function(require,module,exports){
+},{"./itemView":21,"./listView":22,"hyperapp":8}],21:[function(require,module,exports){
+'use strict';
+
+var _require = require('hyperapp'),
+    h = _require.h;
+
+var classnames = require('classnames');
+
+var itemView = module.exports = function (model, actions) {
+  var item = model.items[model.router.params.id];
+
+  var Comment = function Comment(_ref) {
+    var item = _ref.item;
+    return h(
+      'div',
+      null,
+      h(
+        'p',
+        null,
+        item.type === 'comment' && item.text
+      ),
+      h('br', null),
+      item.kids && item.kids.map(function (id) {
+        return h(Comment, { item: model.items[id] });
+      })
+    );
+  };
+
+  return h(
+    'div',
+    null,
+    !model.loading && h(Comment, { item: item }),
+    model.loading && h('div', { 'class': classnames({ loading: model.loading }) })
+  );
+};
+
+},{"classnames":1,"hyperapp":8}],22:[function(require,module,exports){
 'use strict';
 
 var _require = require('hyperapp'),

@@ -19,6 +19,7 @@ const Items = module.exports = ({ items, ids, actions, type, page, loading }) =>
               index={i}
               item={items[id]}
               page={page}
+              actions={actions}
             />
             ))}
           </ul>

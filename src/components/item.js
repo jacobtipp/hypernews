@@ -1,7 +1,18 @@
 const { h } = require('hyperapp')
 
-const Item = module.exports = ({ page, item, index }) => {
+const Item = module.exports = ({ actions, page, item, index }) => {
   index = ((page * 30) - 30) + (++index)
+
+  const onClick = e => {
+    e.preventDefault()
+
+    actions.toggleLoading() 
+    actions.router.go(`/item/${item.id}`)
+    actions.fetchItem(item.id)
+      .then(actions.fetchComments)
+      .then(actions.toggleLoading)
+  }
+
   return (
     <li>
       <span className='index'>
@@ -24,6 +35,7 @@ const Item = module.exports = ({ page, item, index }) => {
       <span className='comment-link'>
         <a
           href={`/item/${item.id}`}
+          onclick={onClick}
         >{item.hasOwnProperty('descendants') && `comments: ${item.descendants}`}
         </a>
       </span>

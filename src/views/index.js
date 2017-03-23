@@ -1,5 +1,6 @@
 const { h } = require('hyperapp')
 const listView = require('./listView')
+const itemView = require('./itemView')
 
 const views = module.exports = {
   '/': listView('top'),
@@ -13,6 +14,7 @@ const views = module.exports = {
  '/ask/:page': listView('ask'),
  '/jobs': listView('job'),
  '/jobs/:page': listView('job'),
+ '/item/:id': itemView,
  '*': (model, actions) => <div>404</div>
 }
 
