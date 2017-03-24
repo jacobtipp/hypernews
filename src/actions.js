@@ -5,11 +5,11 @@ const reducers = module.exports = {
     loading: !model.loading
   }),
 
-  updateIds: (model, { ids, type } ) => ({
+  cacheIds: (model, { ids, type } ) => ({
     ids: Object.assign({}, model.ids, { [type]: ids })
   }),
 
-  updateItems: (model, items) => ({
+  cacheItems: (model, items) => ({
     items: Object.assign({}, model.items, items)
   }),
 
@@ -18,19 +18,23 @@ const reducers = module.exports = {
 
     return Promise.all(items)
       .then(items => {
-        items = items.reduce((a, b) => {
+        return items.reduce((a, b) => {
           if (b) {
             a[b.id] = b
           }
           return a
         }, {})
-        return items
       })
   },
 
-  fetchItem: (model, id) => new Promise(resolve => {
+  fetchItem: (model, id, actions) => new Promise(resolve => {
     database.child(`item/${id}`).once('value', snapshot => {
-      resolve(snapshot.val())
+      const item = snapshot.val()
+
+      if (item) {
+        actions.cacheItems({ [item.id]: item })
+      }
+      resolve(item)
     })
   }),
 
@@ -40,8 +44,7 @@ const reducers = module.exports = {
 
       actions.fetchItems(ids)
         .then(items => {
-          actions.updateItems(items)
-          actions.updateIds({ type, ids: ids.filter(id => items[id]) })
+          actions.cacheIds({ type, ids: ids.filter(id => items[id]) })
           resolve()
         })
     })
@@ -50,10 +53,6 @@ const reducers = module.exports = {
   fetchComments: (model, item, actions) => {
     if (item.kids) {
       return actions.fetchItems(item.kids)
-        .then(items => {
-          actions.updateItems(items)
-          return items
-        })
         .then(items => Promise.all(item.kids.map(id => {
           return actions.fetchComments(items[id])
         })))
@@ -68,6 +67,13 @@ const reducers = module.exports = {
 
     actions.toggleLoading()
     actions.fetchStory(type)
+      .then(actions.toggleLoading)
+  },
+
+  fetchItemAndComments: ({ loading }, id, actions) => {
+    actions.toggleLoading() 
+    actions.fetchItem(id)
+      .then(actions.fetchComments)
       .then(actions.toggleLoading)
   }
 }

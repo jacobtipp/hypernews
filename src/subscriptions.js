@@ -6,6 +6,11 @@ const subscriptions = module.exports = [
 
       if (!match) {
         actions.fetchIds('top')
+        return
+      }
+
+      if (match[0] === 'item') {
+        actions.fetchItemAndComments(model.router.params.id)
       } else {
         actions.fetchIds(match[0])
       }

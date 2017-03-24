@@ -6,11 +6,8 @@ const Item = module.exports = ({ actions, page, item, index }) => {
   const onClick = e => {
     e.preventDefault()
 
-    actions.toggleLoading() 
+    actions.fetchItemAndComments(item.id)
     actions.router.go(`/item/${item.id}`)
-    actions.fetchItem(item.id)
-      .then(actions.fetchComments)
-      .then(actions.toggleLoading)
   }
 
   return (

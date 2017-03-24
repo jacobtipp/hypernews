@@ -10,7 +10,9 @@ const Items = module.exports = ({ items, ids, actions, type, page, loading }) =>
   const sliced = ids.slice(min, max)
 
   return (
-    <main onCreate={() => actions.fetchIds(type)}
+    <main 
+      onUpdate={() => console.log(type)}
+      onCreate={() => actions.fetchIds(type)}
       class='centered'>
       <div class={classnames({ hide: loading })}>
         <ul>
