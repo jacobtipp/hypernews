@@ -29,7 +29,7 @@ header {
 }
 
 nav {
-  padding: 1em;
+  padding: 20px;
 }
 
 nav a {
@@ -46,7 +46,7 @@ nav a.active {
 nav a.active:before, nav a.active:after {
   content: '';
   position: absolute;
-  top: 2.1em;
+  top: 33px;;
   left: 25%;
   border: 5px solid transparent;
   border-bottom-color: #f2f3f5;
@@ -56,7 +56,7 @@ nav a.active:before, nav a.active:after {
 nav a.active:after {
   border: 10px solid transparent;
   border-bottom-color: red;
-  top: 1.4em;
+  top: 20px;
   left: calc(-5px + 25%);
   z-index: 1;
 }
@@ -65,7 +65,7 @@ main.centered {
   position: relative;
   padding: 0;
   margin-bottom: 3em;
-  top: calc(4em - 5px);
+  top: 63px;
 }
 
 main > div {
