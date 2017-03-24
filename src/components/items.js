@@ -11,7 +11,6 @@ const Items = module.exports = ({ items, ids, actions, type, page, loading }) =>
 
   return (
     <main 
-      onUpdate={() => console.log(type)}
       onCreate={() => actions.fetchIds(type)}
       class='centered'>
       <div class={classnames({ hide: loading })}>

@@ -1,4 +1,5 @@
 const database = require('./database')
+const ttl = 1000 * 60 * 15
 
 const reducers = module.exports = {
   toggleLoading: (model) => ({
@@ -28,14 +29,21 @@ const reducers = module.exports = {
   },
 
   fetchItem: (model, id, actions) => new Promise(resolve => {
-    database.child(`item/${id}`).once('value', snapshot => {
-      const item = snapshot.val()
+    const item = model.items[id]
 
-      if (item) {
-        actions.cacheItems({ [item.id]: item })
-      }
+    if (item && item._timestamp + ttl > Date.now()) {
       resolve(item)
-    })
+    } else {
+      database.child(`item/${id}`).once('value', snapshot => {
+        const item = snapshot.val()
+
+        if (item) {
+          item._timestamp = Date.now()
+          actions.cacheItems({ [item.id]: item })
+        }
+        resolve(item)
+      })
+    }
   }),
 
   fetchStory: (model, type, actions) => new Promise(resolve => {
@@ -75,5 +83,26 @@ const reducers = module.exports = {
     actions.fetchItem(id)
       .then(actions.fetchComments)
       .then(actions.toggleLoading)
+  },
+
+  popstate: (model, _, actions) => {
+      const re = /new|job|ask|show|top|item/
+      const path = location.pathname
+      const match = path.match(re)
+
+      if (!match) {
+        actions.fetchIds('top')
+        return
+      }
+
+      if (match[0] === 'item') {
+        let id = path.split('/')[2]
+
+        if (id && model.items[id]) {
+          actions.fetchItemAndComments(id)
+        }
+      } else {
+        actions.fetchIds(match[0])
+      }
   }
 }
