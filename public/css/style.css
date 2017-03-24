@@ -1,7 +1,7 @@
 * {
   padding: 0;
   margin: 0;
-  font-family: arial;
+  font-family: 'Roboto Mono', monospace;
 }
 
 body {
@@ -36,29 +36,12 @@ nav a {
   position: relative;
   margin-right: 3em;
   text-decoration: none;
+  font-weight: 100;
   color: red;
 }
 
 nav a.active {
-  font-weight: 800;
-}
-
-nav a.active:before, nav a.active:after {
-  content: '';
-  position: absolute;
-  top: 33px;;
-  left: 25%;
-  border: 5px solid transparent;
-  border-bottom-color: #f2f3f5;
-  z-index: 999;
-}
-
-nav a.active:after {
-  border: 10px solid transparent;
-  border-bottom-color: red;
-  top: 20px;
-  left: calc(-5px + 25%);
-  z-index: 1;
+  font-weight: 900;
 }
 
 main.centered {
