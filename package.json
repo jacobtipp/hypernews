@@ -2,9 +2,9 @@
   "name": "hypernews",
   "version": "1.0.0",
   "description": "hacker news implementation with hyperapp",
-  "main": "index.js",
   "scripts": {
-    "serve": "pushstate-server public 8010",
+    "serve": "pushstate-server public 8080",
+    "build": "browserify -t babelify src/main.js -o public/bundle.js",
     "watch": "watchify -p [ browserify-livereload ] -t babelify src/main.js -o public/bundle.js -v",
     "dev": "npm run serve & npm run watch"
   },
@@ -17,11 +17,8 @@
   "dependencies": {
     "babel-preset-latest": "^6.22.0",
     "classnames": "^2.2.5",
-    "fetch": "^1.1.0",
     "firebase": "^3.6.10",
     "hyperapp": "^0.7.1",
-    "lscache": "^1.1.0",
-    "memory-cache": "^0.1.6",
     "pushstate-server": "^2.2.1"
   },
   "devDependencies": {

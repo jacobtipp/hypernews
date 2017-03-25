@@ -1,3 +1,5 @@
+#bundle.js files
+*.bundle.js
 # Logs
 logs
 *.log
