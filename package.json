@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "hacker news implementation with hyperapp",
   "scripts": {
+    "start": "npm run serve",
     "serve": "pushstate-server public 8080",
     "build": "browserify -t babelify src/main.js -o public/bundle.js",
     "watch": "watchify -p [ browserify-livereload ] -t babelify src/main.js -o public/bundle.js -v",
@@ -26,6 +27,7 @@
     "babelify": "^7.3.0",
     "browserify": "^14.1.0",
     "browserify-livereload": "^1.0.9",
-    "http-server": "^0.9.0"
+    "http-server": "^0.9.0",
+    "watchify": "^3.9.0"
   }
 }
