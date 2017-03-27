@@ -70,29 +70,35 @@ const reducers = module.exports = {
 
   fetchIds: ({ ids, loading }, type, actions) => {
     actions.toggleLoading()
-    actions.fetchStory(type)
+    return actions.fetchStory(type)
       .then(actions.toggleLoading)
   },
 
   fetchItemAndComments: ({ loading }, id, actions) => {
     actions.toggleLoading() 
-    actions.fetchItem(id)
+    return actions.fetchItem(id)
       .then(actions.fetchComments)
       .then(actions.toggleLoading)
   },
 
   popstate: (model, _, actions) => {
-    const re = /new|job|ask|show|top/
+    const re = /new|job|ask|show|top|item/
     const path = location.pathname
     const match = path.match(re)
 
-    if (!match) {
+    if (!match && !model.ids['top'].length) {
       actions.fetchIds('top')
       return
     }
 
-    if (match) {
-      actions.fetchIds(match[0])
+    const type = match[0]
+
+    if (type === 'item') {
+      return 
+    }
+
+    if (!model.ids[type].length) {
+      actions.fetchIds(type)
     }
   }
 }

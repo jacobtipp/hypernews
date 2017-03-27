@@ -4,9 +4,8 @@ const navLink = module.exports = ({ loading, active, name, type, actions }) => {
   const onClick = e => {
     e.preventDefault()
 
-    actions.router.go(`/${name}`)
     actions.fetchIds(name === 'jobs' ? 'job' : name)
-    window.scrollTo(0, 0)
+      .then(() => actions.router.go(`/${name}`))
   }
 
   return (
