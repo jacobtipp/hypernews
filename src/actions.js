@@ -69,10 +69,6 @@ const reducers = module.exports = {
   },
 
   fetchIds: ({ ids, loading }, type, actions) => {
-    if (loading) {
-      return 
-    }
-
     actions.toggleLoading()
     actions.fetchStory(type)
       .then(actions.toggleLoading)
@@ -86,23 +82,17 @@ const reducers = module.exports = {
   },
 
   popstate: (model, _, actions) => {
-      const re = /new|job|ask|show|top|item/
-      const path = location.pathname
-      const match = path.match(re)
+    const re = /new|job|ask|show|top/
+    const path = location.pathname
+    const match = path.match(re)
 
-      if (!match) {
-        actions.fetchIds('top')
-        return
-      }
+    if (!match) {
+      actions.fetchIds('top')
+      return
+    }
 
-      if (match[0] === 'item') {
-        let id = path.split('/')[2]
-
-        if (id && model.items[id]) {
-          actions.fetchItemAndComments(id)
-        }
-      } else {
-        actions.fetchIds(match[0])
-      }
+    if (match) {
+      actions.fetchIds(match[0])
+    }
   }
 }
