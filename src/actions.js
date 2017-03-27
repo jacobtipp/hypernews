@@ -91,14 +91,16 @@ const reducers = module.exports = {
       return
     }
 
-    const type = match[0]
+    if (match) {
+      let type = match[0]
 
-    if (type === 'item') {
-      return 
-    }
+      if (type === 'item') {
+        return 
+      }
 
-    if (!model.ids[type].length) {
-      actions.fetchIds(type)
+      if (!model.ids[type].length) {
+        actions.fetchIds(type)
+      }
     }
   }
 }
