@@ -47,12 +47,10 @@ nav a.active {
 
 main.centered, .item.centered {
   position: relative;
-  padding: 0;
-  margin-bottom: 3em;
   top: 61px;
 }
 
-.by, nav a, .comment-link a {
+.score, .by, nav a, .comment-link a {
   color: rgba(255, 0, 0, 0.5)
 }
 
@@ -73,11 +71,11 @@ main.centered, .item.centered {
 }
 
 .comment {
-  border-top: 1px solid red;
+  border-top: 1px solid rgba(255, 0, 0, 0.2);
 }
 
 .child-comments {
-  padding-left: 1.5em;
+  padding-left: 1.25em;
 }
 
 .comment:first-child {
