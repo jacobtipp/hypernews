@@ -54,7 +54,7 @@ main.centered, .item.centered {
 }
 
 .by {
-  color: #999;
+  color: rgba(255, 0, 0, 0.5)
 }
 
 .item .title {
