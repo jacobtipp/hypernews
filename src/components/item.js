@@ -7,6 +7,7 @@ const Item = module.exports = ({ actions, page, item, index }) => {
     e.preventDefault()
 
     actions.router.go(`/item/${item.id}`)
+    window.scrollTo(0, 0);
   }
 
   return (

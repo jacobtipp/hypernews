@@ -20,7 +20,7 @@ header {
   left: 0;
   z-index: 999;
   width: 100%;
-  border-bottom: 5px solid red;
+  border-bottom: 3px solid red;
 }
 
 .centered {
@@ -30,7 +30,7 @@ header {
 }
 
 nav {
-  padding: calc(20px - 5px);
+  padding: calc(20px - 3px);
 }
 
 nav a {
@@ -47,6 +47,7 @@ nav a.active {
 
 main.centered, .item.centered {
   position: relative;
+  margin-bottom: 4em;
   top: 61px;
 }
 
