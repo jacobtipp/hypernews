@@ -30,14 +30,14 @@ const Items = module.exports = ({ items, ids, actions, type, page, loading }) =>
             />
             ))}
           </ul>
-          </div>
-          {(!loading && sliced.length === limit) && 
-            <More 
-              page={page} 
-              actions={actions} 
-              type={type}
-            />}
-            {<div class={classnames({ loading })}></div>}
+        </div>
+        {(!loading && sliced.length === limit) && 
+          <More 
+            page={page} 
+            actions={actions} 
+            type={type}
+          />}
+          {loading && <div class={classnames({ loading })}/>}
         </main>
   )
 }

@@ -11,10 +11,10 @@ const Item = module.exports = ({ actions, page, item, index }) => {
 
   return (
     <li>
-      <span className='index'>
+      <span class='index'>
         {index}
       </span>
-      <span className='url'>
+      <span class='url'>
         <a
           href={item.url || `/item/${item.id}`}
         >
@@ -22,13 +22,13 @@ const Item = module.exports = ({ actions, page, item, index }) => {
         </a>
       </span>
       <br />
-      <span className='score'>
+      <span class='score'>
         {`score: ${item.score}`}
       </span>
-      <span className='by'>
+      <span class='by'>
         by: {item.by}
       </span>
-      <span className='comment-link'>
+      <span class='comment-link'>
         <a
           href={`/item/${item.id}`}
           onclick={onClick}

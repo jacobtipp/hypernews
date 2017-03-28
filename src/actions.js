@@ -6,6 +6,10 @@ const reducers = module.exports = {
     loading: !model.loading
   }),
 
+  toggleCollapse: ({ collapsed }, id) => ({
+    collapsed: Object.assign({}, collapsed, { [id]: !collapsed[id] })
+  }),
+
   cacheIds: (model, { ids, type } ) => ({
     ids: Object.assign({}, model.ids, { [type]: ids })
   }),
@@ -75,7 +79,7 @@ const reducers = module.exports = {
   },
 
   fetchItemAndComments: ({ loading }, id, actions) => {
-    actions.toggleLoading() 
+    actions.toggleLoading()
     return actions.fetchItem(id)
       .then(actions.fetchComments)
       .then(actions.toggleLoading)

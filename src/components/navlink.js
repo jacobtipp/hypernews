@@ -5,7 +5,7 @@ const navLink = module.exports = ({ loading, active, name, type, actions }) => {
     e.preventDefault()
 
     actions.fetchIds(name === 'jobs' ? 'job' : name)
-      .then(() => actions.router.go(`/${name}`))
+    actions.router.go(`/${name}`)
   }
 
   return (

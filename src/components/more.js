@@ -4,7 +4,7 @@ const More = module.exports = ({ page, actions, type }) => {
   const url = `/${type}/${page + 1}`
 
   return (
-    <span className='more'>
+    <span class='more'>
       <a
         href={url}
         onclick={e => {

@@ -7,6 +7,7 @@ app({
   model: {
     loading: false,
     items: {},
+    collapsed: {},
     ids: {
       top: [],
       new: [],
