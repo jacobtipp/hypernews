@@ -38,7 +38,6 @@ nav a {
   margin-right: 2em;
   text-decoration: none;
   font-weight: 100;
-  color: rgba(255, 0, 0, 0.5)
 }
 
 nav a.active {
@@ -53,7 +52,7 @@ main.centered, .item.centered {
   top: 61px;
 }
 
-.by {
+.by, nav a, .comment-link a {
   color: rgba(255, 0, 0, 0.5)
 }
 
@@ -150,10 +149,6 @@ span {
 
 .score, .by, .comment-link {
   font-size: 0.75em;
-}
-
-.comment-link a {
-  color: #999;
 }
 
 .more {
