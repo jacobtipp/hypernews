@@ -51,7 +51,7 @@ main.centered, .item.centered {
 }
 
 .score, .by, nav a, .comment-link a {
-  color: rgba(255, 0, 0, 0.5)
+  color: rgba(255, 0, 0, 0.7)
 }
 
 .item .title {
@@ -127,7 +127,7 @@ main ul li:last-child {
 }
 
 .url a {
-  color: red;
+  color: black;
 }
 
 span {

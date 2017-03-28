@@ -15,7 +15,7 @@ const itemView = module.exports = (model, actions) => {
     <div class='comment'>
       <span class='min'>
         <a onClick={() => actions.toggleCollapse(item.id)}>
-          {collapsed ? `[+${(item.kids && item.kids.length) || '1'}]` : '[-]'}
+          {collapsed ? `[+${(item.kids && item.kids.length) || ''}]` : '[-]'}
         </a>
       </span>
       <span class='by'>by: {item.by}</span>
