@@ -40,7 +40,7 @@ const itemView = module.exports = (model, actions) => {
       <div class='title'>
         <span class='url'>
           <a 
-            href={item.url || `item/${item.id}`}>
+            href={item.url || `/item/${item.id}`}>
             {item.title}
           </a>
         </span>

@@ -53,6 +53,10 @@ main.centered, .item.centered {
   top: 61px;
 }
 
+.by {
+  color: #999;
+}
+
 .item .title {
   padding: 2em;
   background: white;
@@ -74,7 +78,7 @@ main.centered, .item.centered {
 }
 
 .child-comments {
-  padding-left: 1em;
+  padding-left: 1.5em;
 }
 
 .comment:first-child {
