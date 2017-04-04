@@ -63,7 +63,7 @@ const reducers = module.exports = {
   }),
 
   fetchComments: (model, item, actions) => {
-    if (item.kids) {
+    if (item && item.kids) {
       return actions.fetchItems(item.kids)
         .then(items => Promise.all(item.kids.map(id => {
           return actions.fetchComments(items[id])
