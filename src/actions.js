@@ -75,6 +75,7 @@ const reducers = module.exports = {
   fetchIds: ({ ids, loading }, type, actions) => {
     actions.toggleLoading()
     return actions.fetchStory(type)
+      .catch(console.error)
       .then(actions.toggleLoading)
   },
 
@@ -82,6 +83,7 @@ const reducers = module.exports = {
     actions.toggleLoading()
     return actions.fetchItem(id)
       .then(actions.fetchComments)
+      .catch(console.error)
       .then(actions.toggleLoading)
   },
 
