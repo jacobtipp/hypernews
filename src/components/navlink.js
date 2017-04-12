@@ -1,6 +1,6 @@
 const { h } = require('hyperapp')
 
-const navLink = module.exports = ({ loading, active, name, type, actions }) => {
+const navLink = module.exports = ({ active, name, type, actions }) => {
   const onClick = e => {
     e.preventDefault()
 
