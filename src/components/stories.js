@@ -3,7 +3,7 @@ const Container = require('./container')
 const Items = require('./items')
 
 const Stories = module.exports = ({ items, ids, type, page, actions, loading }) => (
-  <Container actions={actions} type={type}>
+  <Container loading={loading} actions={actions} type={type}>
     <Items
       loading={loading}
       page={page}

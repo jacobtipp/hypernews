@@ -37,6 +37,7 @@ const Items = module.exports = ({ items, ids, actions, type, page, loading }) =>
             actions={actions} 
             type={type}
           />}
+          {loading && <div class={classnames({ loading })}/>}
         </main>
   )
 }
