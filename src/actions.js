@@ -1,7 +1,7 @@
 const database = require('./database')
 const ttl = 1000 * 60 * 15
 
-const reducers = module.exports = {
+export const actions = {
   toggleLoading: (model) => ({
     loading: !model.loading
   }),

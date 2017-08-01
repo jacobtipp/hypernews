@@ -1,8 +1,8 @@
-const { h } = require('hyperapp')
-const listView = require('./listView')
-const itemView = require('./itemView')
+import { h } from 'hyperapp';
+import listView from './listView';
+import itemView from './itemView';
 
-const views = module.exports = {
+export const view = {
   '/': listView('top'),
   '/top': listView('top'),
  '/top/:page': listView('top'),

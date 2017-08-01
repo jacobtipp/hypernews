@@ -1,7 +1,7 @@
-const { h, app, Router } = require('hyperapp')
-const subscriptions = require('./subscriptions')
-const actions = require('./actions')
-const view = require('./views')
+import { h, app, Router } from 'hyperapp';
+import { subscriptions } from './subscriptions';
+import { actions } from './actions';
+import { view } from './views/view';
 
 app({
   model: {

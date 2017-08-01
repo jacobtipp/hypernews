@@ -16,7 +16,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "babel-preset-latest": "^6.22.0",
     "classnames": "^2.2.5",
     "firebase": "^3.6.10",
     "hyperapp": "^0.7.1",
@@ -24,6 +23,7 @@
   },
   "devDependencies": {
     "babel-plugin-transform-react-jsx": "^6.23.0",
+    "babel-preset-es2015": "^6.24.1",
     "babelify": "^7.3.0",
     "browserify": "^14.1.0",
     "browserify-livereload": "^1.0.10",
