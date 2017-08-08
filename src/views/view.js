@@ -1,6 +1,6 @@
 import { h } from 'hyperapp';
-import listView from './listView';
-import itemView from './itemView';
+import { listView } from './listView';
+import { itemView } from './itemView';
 
 export const view = {
   '/': listView('top'),
@@ -16,5 +16,4 @@ export const view = {
  '/jobs/:page': listView('job'),
  '/item/:id': itemView,
  '*': (model, actions) => <div>404</div>
-}
-
+};

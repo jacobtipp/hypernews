@@ -1,19 +1,19 @@
-const { h } = require('hyperapp')
+import { h } from 'hyperapp';
 
-const navLink = module.exports = ({ loading, active, name, type, actions }) => {
+export const NavLink = ({ loading, active, name, type, actions }) => {
   const onClick = e => {
-    e.preventDefault()
+    e.preventDefault();
 
-    actions.fetchIds(name === 'jobs' ? 'job' : name)
-    actions.router.go(`/${name}`)
-  }
+    actions.fetchIds(name === 'jobs' ? 'job' : name);
+    actions.router.go(`/${name}`);
+  };
 
   return (
     <a 
-      href={`/${name}`}
-      class={active && 'active'}
-      onclick={onClick}
-    >{`${name[0].toUpperCase()}${name.slice(1)}`}
+      href={ `/${name}` }
+      class={ active && 'active' }
+      onclick={ onClick }
+    >{ `${name[0].toUpperCase()}${name.slice(1)}` }
     </a>
-  )
-}
+  );
+};

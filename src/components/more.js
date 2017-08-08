@@ -1,21 +1,20 @@
-const { h } = require('hyperapp')
+import { h } from 'hyperapp';
 
-const More = module.exports = ({ page, actions, type }) => {
-  const url = `/${type}/${page + 1}`
+export const More = ({ page, actions, type }) => {
+  const url = `/${type}/${page + 1}`;
 
   return (
     <span class='more'>
       <a
-        href={url}
-        onclick={e => {
-          e.preventDefault()
-          actions.router.go(url)
-          window.scrollTo(0, 0)
+        href={ url }
+        onclick={ e => {
+          e.preventDefault();
+          actions.router.go(url);
+          window.scrollTo(0, 0);
         }}
       >
-        more
+      more
       </a>
     </span>
-  )
-}
-
+  );
+};

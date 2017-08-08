@@ -1,41 +1,41 @@
-const { h } = require('hyperapp')
+import { h } from 'hyperapp';
 
-const Item = module.exports = ({ actions, page, item, index }) => {
-  index = ((page * 30) - 30) + (++index)
+export const Item = ({ actions, page, item, index }) => {
+  index = ((page * 30) - 30) + (++index);
 
   const onClick = e => {
-    e.preventDefault()
+    e.preventDefault();
 
-    actions.router.go(`/item/${item.id}`)
+    actions.router.go(`/item/${item.id}`);
     window.scrollTo(0, 0);
   }
 
   return (
     <li>
       <span class='index'>
-        {index}
+        { index }
       </span>
       <span class='url'>
         <a
-          href={item.url || `/item/${item.id}`}
+          href={ item.url || `/item/${ item.id }` }
         >
-          {item.title}
+          { item.title }
         </a>
       </span>
       <br />
       <span class='score'>
-        {`score: ${item.score}`}
+        { `score: ${item.score}` }
       </span>
       <span class='by'>
-        by: {item.by}
+        by: { item.by }
       </span>
       <span class='comment-link'>
         <a
-          href={`/item/${item.id}`}
-          onclick={onClick}
-        >{item.hasOwnProperty('descendants') && `comments: ${item.descendants}`}
+          href={ `/item/${item.id}` }
+          onclick={ onClick }
+        >{ item.hasOwnProperty('descendants') && `comments: ${ item.descendants }`}
         </a>
       </span>
     </li>
-  )
-}
+  );
+};

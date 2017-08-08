@@ -21,4 +21,4 @@ app({
   plugins: [Router],
   actions: actions,
   subscriptions
-})
+});

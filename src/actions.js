@@ -1,5 +1,6 @@
-const database = require('./database')
-const ttl = 1000 * 60 * 15
+import { database } from './database';
+
+const ttl = 1000 * 60 * 15;
 
 export const actions = {
   toggleLoading: (model) => ({
@@ -19,46 +20,46 @@ export const actions = {
   }),
 
   fetchItems: (model, ids, actions) => {
-    const items = ids.map(actions.fetchItem)
+    const items = ids.map(actions.fetchItem);
 
     return Promise.all(items)
       .then(items => {
         return items.reduce((a, b) => {
           if (b) {
-            a[b.id] = b
+            a[b.id] = b;
           }
-          return a
+          return a;
         }, {})
       })
   },
 
   fetchItem: (model, id, actions) => new Promise(resolve => {
-    const item = model.items[id]
+    const item = model.items[id];
 
     if (item && item._timestamp + ttl > Date.now()) {
-      resolve(item)
+      resolve(item);
     } else {
       database.child(`item/${id}`).once('value', snapshot => {
-        const item = snapshot.val()
+        const item = snapshot.val();
 
         if (item) {
-          item._timestamp = Date.now()
-          actions.cacheItems({ [item.id]: item })
+          item._timestamp = Date.now();
+          actions.cacheItems({ [item.id]: item });
         }
-        resolve(item)
+        resolve(item);
       })
     }
   }),
 
   fetchStory: (model, type, actions) => new Promise(resolve => {
     database.child(`${type}stories`).once('value', snapshot => {
-      const ids = snapshot.val()
+      const ids = snapshot.val();
 
       actions.fetchItems(ids)
         .then(items => {
-          actions.cacheIds({ type, ids: ids.filter(id => items[id]) })
-          resolve()
-        })
+          actions.cacheIds({ type, ids: ids.filter(id => items[id]) });
+          resolve();
+        });
     })
   }),
 
@@ -66,47 +67,47 @@ export const actions = {
     if (item && item.kids) {
       return actions.fetchItems(item.kids)
         .then(items => Promise.all(item.kids.map(id => {
-          return actions.fetchComments(items[id])
-        })))
+          return actions.fetchComments(items[id]);
+        })));
 
     }
   },
 
   fetchIds: ({ ids, loading }, type, actions) => {
-    actions.toggleLoading()
+    actions.toggleLoading();
     return actions.fetchStory(type)
       .catch(console.error)
-      .then(actions.toggleLoading)
+      .then(actions.toggleLoading);
   },
 
   fetchItemAndComments: ({ loading }, id, actions) => {
-    actions.toggleLoading()
+    actions.toggleLoading();
     return actions.fetchItem(id)
       .then(actions.fetchComments)
       .catch(console.error)
-      .then(actions.toggleLoading)
+      .then(actions.toggleLoading);
   },
 
   popstate: (model, _, actions) => {
-    const re = /new|job|ask|show|top|item/
-    const path = location.pathname
-    const match = path.match(re)
+    const re = /new|job|ask|show|top|item/;
+    const path = location.pathname;
+    const match = path.match(re);
 
     if (!match && !model.ids['top'].length) {
-      actions.fetchIds('top')
-      return
+      actions.fetchIds('top');
+      return;
     }
 
     if (match) {
-      let type = match[0]
+      let type = match[0];
 
       if (type === 'item') {
-        return 
+        return;
       }
 
       if (!model.ids[type].length) {
-        actions.fetchIds(type)
+        actions.fetchIds(type);
       }
     }
   }
-}
+};

@@ -4,4 +4,4 @@ export const subscriptions = [
       actions.popstate()
     })
   }
-]
+];

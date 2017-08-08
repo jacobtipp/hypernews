@@ -1,15 +1,15 @@
-const { h } = require('hyperapp')
-const classnames = require('classnames')
-const Container = require('../components/container')
+import { h } from 'hyperapp';
+import classnames from 'classnames';
+import { Container } from '../components/container';
 
-const itemView = module.exports = (model, actions) => {
-  const id = model.router.params.id
-  const item = model.items[id]
-  const { loading } = model
+export const itemView = (model, actions) => {
+  const id = model.router.params.id;
+  const item = model.items[id];
+  const { loading } = model;
 
   const onCreate = e => {
-    actions.fetchItemAndComments(id)
-  }
+    actions.fetchItemAndComments(id);
+  };
 
   const Comment = ({ item, collapsed }) => (
     <div class='comment'>
@@ -26,14 +26,14 @@ const itemView = module.exports = (model, actions) => {
           onCreate={e => e.innerHTML = item.text}>
         </span>
         {item.kids && item.kids.map(id => {
-          const item = model.items[id]
+          const item = model.items[id];
           return item && 
             !item.deleted &&
-            <Comment collapsed={!!model.collapsed[item.id]} item={item}/>
+            <Comment collapsed={!!model.collapsed[item.id]} item={item}/>;
           })}
         </div>
       </div>
-  )
+  );
 
   const Title = ({ item, loading }) => (
     <section>
@@ -50,15 +50,15 @@ const itemView = module.exports = (model, actions) => {
       </div>
       <div class={classnames('comments', { hide: loading })}>
         {item.kids && item.kids.map(id => {
-          const item = model.items[id]
+          const item = model.items[id];
           return item && 
             !item.deleted &&
-            <Comment collapsed={!!model.collapsed[item.id]} item={item}/>
+            <Comment collapsed={!!model.collapsed[item.id]} item={item}/>;
           })}
         </div>
         {loading && <div class={classnames({ loading })} />}
       </section>
-  )
+  );
 
   return (
     <Container actions={actions} type={null} loading={model.loading}>
@@ -66,5 +66,5 @@ const itemView = module.exports = (model, actions) => {
         {item && <Title item={item} loading={loading} />}
       </section>
     </Container>
-  )
-}
+  );
+};
