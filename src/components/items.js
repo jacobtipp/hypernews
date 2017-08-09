@@ -16,33 +16,19 @@ export const Items = ({ items, ids, actions, type, page, loading }) => {
   };
 
   return (
-    <main 
-      onCreate={ onCreate }
-      class='centered'>
-      <div class={ classnames({ hide: loading }) }>
+    <main onCreate={onCreate} class="centered">
+      <div class={classnames({ hide: loading })}>
         <ul>
-        {
-          sliced.map((id, i) => (
-          <Item
-            index={ i }
-            item={ items[id] }
-            page={ page }
-            actions={ actions }
-          />
-          ))
-        }
+          {sliced.map((id, i) =>
+            <Item index={i} item={items[id]} page={page} actions={actions} />
+          )}
         </ul>
       </div>
-      {
-        (!loading && sliced.length === limit) && 
-        <More 
-          page={ page } 
-          actions={ actions } 
-          type={ type }
-        />
-      }
-      
-      { loading && <div class={ classnames({ loading }) }/> }
+      {!loading &&
+        sliced.length === limit &&
+        <More page={page} actions={actions} type={type} />}
+
+      {loading && <div class={classnames({ loading })} />}
     </main>
   );
 };

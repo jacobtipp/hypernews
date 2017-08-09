@@ -9,11 +9,8 @@ export const NavLink = ({ loading, active, name, type, actions }) => {
   };
 
   return (
-    <a 
-      href={ `/${name}` }
-      class={ active && 'active' }
-      onclick={ onClick }
-    >{ `${name[0].toUpperCase()}${name.slice(1)}` }
+    <a href={`/${name}`} class={active && 'active'} onclick={onClick}>
+      {`${name[0].toUpperCase()}${name.slice(1)}`}
     </a>
   );
 };

@@ -7,17 +7,20 @@ export const actions = {
     loading: !model.loading
   }),
 
-  toggleCollapse: ({ collapsed }, id) => ({
-    collapsed: Object.assign({}, collapsed, { [id]: !collapsed[id] })
-  }),
+  toggleCollapse: ({ collapsed }, id) => {
+    collapsed[id] = !collapsed[id];
+    return { collapsed };
+  },
 
-  cacheIds: (model, { ids, type } ) => ({
-    ids: Object.assign({}, model.ids, { [type]: ids })
-  }),
+  cacheIds: ({ ids }, { cacheIds, type } ) => {
+    ids[type] = cacheIds;
+    return { ids };
+  },
 
-  cacheItems: (model, items) => ({
-    items: Object.assign({}, model.items, items)
-  }),
+  cacheItem: ({ items }, item) => {
+    items[item.id] = item;
+    return { items };
+  },
 
   fetchItems: (model, ids, actions) => {
     const items = ids.map(actions.fetchItem);
@@ -44,7 +47,7 @@ export const actions = {
 
         if (item) {
           item._timestamp = Date.now();
-          actions.cacheItems({ [item.id]: item });
+          actions.cacheItem(item);
         }
         resolve(item);
       })
@@ -57,7 +60,7 @@ export const actions = {
 
       actions.fetchItems(ids)
         .then(items => {
-          actions.cacheIds({ type, ids: ids.filter(id => items[id]) });
+          actions.cacheIds({ type, cacheIds: ids.filter(id => items[id]) });
           resolve();
         });
     })
