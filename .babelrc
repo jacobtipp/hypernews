@@ -1,11 +1,19 @@
 {
-  "presets": ["es2015"],
+  "presets": [
+    [
+      "es2015",
+      {
+        "modules": false
+      }
+    ]
+  ],
   "plugins": [
     [
       "transform-react-jsx",
-    {
-      "pragma": "h"
-    }
-    ]
+      {
+        "pragma": "h"
+      }
+    ],
+    "external-helpers"
   ]
 }
