@@ -1,13 +1,12 @@
 {
   "name": "hypernews",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "hacker news implementation with hyperapp",
   "scripts": {
     "start": "npm run build && npm run serve",
     "serve": "pushstate-server public 8080",
-    "build": "browserify -t babelify src/main.js -o public/bundle.js",
-    "build1": "rollup -c",
-    "watch": "watchify -p [ browserify-livereload ] -t babelify src/main.js -o public/bundle.js -v",
+    "build": "rollup -c",
+    "watch": "rollup -c -w",
     "dev": "npm run serve & npm run watch"
   },
   "keywords": [
@@ -18,7 +17,6 @@
   "license": "ISC",
   "dependencies": {
     "classnames": "^2.2.5",
-    "firebase": "^3.6.10",
     "hyperapp": "^0.7.1",
     "pushstate-server": "^2.2.1"
   },
@@ -27,13 +25,9 @@
     "babel-plugin-external-helpers": "^6.22.0",
     "babel-plugin-transform-react-jsx": "^6.23.0",
     "babel-preset-es2015": "^6.24.1",
-    "babelify": "^7.3.0",
-    "browserify": "^14.1.0",
-    "browserify-livereload": "^1.0.10",
     "rollup": "^0.47.6",
     "rollup-plugin-babel": "^3.0.2",
     "rollup-plugin-commonjs": "^8.1.0",
-    "rollup-plugin-node-resolve": "^3.0.0",
-    "watchify": "^3.9.0"
+    "rollup-plugin-node-resolve": "^3.0.0"
   }
 }

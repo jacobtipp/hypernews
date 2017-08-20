@@ -6,9 +6,10 @@ export default {
   entry: 'src/main.js',
   format: 'iife',
   plugins: [
-    babel(),
+    commonjs(),
     resolve({ jsnext: true }),
-    commonjs()
+    babel({ exclude: 'node_modules/**' }),
   ],
   dest: 'public/bundle.js',
+  external: ['firebase']
 };
