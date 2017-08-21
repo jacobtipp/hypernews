@@ -16,7 +16,7 @@ export const Items = ({ items, ids, actions, type, page, loading }) => {
   };
 
   return (
-    <main onCreate={onCreate} class="centered">
+    <main oncreate={onCreate} class="centered">
       <div class={classnames({ hide: loading })}>
         <ul>
           {sliced.map((id, i) =>

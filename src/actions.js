@@ -3,26 +3,26 @@ import { database } from './database';
 const ttl = 1000 * 60 * 15;
 
 export const actions = {
-  toggleLoading: (model) => ({
-    loading: !model.loading
+  toggleLoading: (state) => ({
+    loading: !state.loading
   }),
 
-  toggleCollapse: ({ collapsed }, id) => {
+  toggleCollapse: ({ collapsed }, _, id) => {
     collapsed[id] = !collapsed[id];
     return { collapsed };
   },
 
-  cacheIds: ({ ids }, { cacheIds, type } ) => {
+  cacheIds: ({ ids }, _, { cacheIds, type } ) => {
     ids[type] = cacheIds;
     return { ids };
   },
 
-  cacheItem: ({ items }, item) => {
+  cacheItem: ({ items }, _, item) => {
     items[item.id] = item;
     return { items };
   },
 
-  fetchItems: (model, ids, actions) => {
+  fetchItems: (state, actions, ids) => {
     const items = ids.map(actions.fetchItem);
 
     return Promise.all(items)
@@ -36,8 +36,8 @@ export const actions = {
       })
   },
 
-  fetchItem: (model, id, actions) => new Promise(resolve => {
-    const item = model.items[id];
+  fetchItem: (state, actions, id) => new Promise(resolve => {
+    const item = state.items[id];
 
     if (item && item._timestamp + ttl > Date.now()) {
       resolve(item);
@@ -54,7 +54,7 @@ export const actions = {
     }
   }),
 
-  fetchStory: (model, type, actions) => new Promise(resolve => {
+  fetchStory: (state, actions, type) => new Promise(resolve => {
     database.child(`${type}stories`).once('value', snapshot => {
       const ids = snapshot.val();
 
@@ -66,7 +66,7 @@ export const actions = {
     })
   }),
 
-  fetchComments: (model, item, actions) => {
+  fetchComments: (state, actions, item) => {
     if (item && item.kids) {
       return actions.fetchItems(item.kids)
         .then(items => Promise.all(item.kids.map(id => {
@@ -76,14 +76,14 @@ export const actions = {
     }
   },
 
-  fetchIds: ({ ids, loading }, type, actions) => {
+  fetchIds: ({ ids, loading }, actions, type) => {
     actions.toggleLoading();
     return actions.fetchStory(type)
       .catch(console.error)
       .then(actions.toggleLoading);
   },
 
-  fetchItemAndComments: ({ loading }, id, actions) => {
+  fetchItemAndComments: ({ loading }, actions, id) => {
     actions.toggleLoading();
     return actions.fetchItem(id)
       .then(actions.fetchComments)
@@ -91,12 +91,12 @@ export const actions = {
       .then(actions.toggleLoading);
   },
 
-  popstate: (model, _, actions) => {
+  popstate: (state, actions) => {
     const re = /new|job|ask|show|top|item/;
     const path = location.pathname;
     const match = path.match(re);
 
-    if (!match && !model.ids['top'].length) {
+    if (!match && !state.ids['top'].length) {
       actions.fetchIds('top');
       return;
     }
@@ -108,7 +108,7 @@ export const actions = {
         return;
       }
 
-      if (!model.ids[type].length) {
+      if (!state.ids[type].length) {
         actions.fetchIds(type);
       }
     }

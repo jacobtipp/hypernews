@@ -2,10 +2,10 @@ import { h } from 'hyperapp';
 import classnames from 'classnames';
 import { Container } from '../components/container';
 
-export const itemView = (model, actions) => {
-  const id = model.router.params.id;
-  const item = model.items[id];
-  const { loading } = model;
+export const itemView = (state, actions) => {
+  const id = state.router.params.id;
+  const item = state.items[id];
+  const { loading } = state;
 
   const onCreate = e => {
     actions.fetchItemAndComments(id);
@@ -23,14 +23,14 @@ export const itemView = (model, actions) => {
       </span>
       <br />
       <div class={classnames('child-comments', { hide: collapsed })}>
-        <span class="text" onCreate={e => (e.innerHTML = item.text)} />
+        <span class="text" oncreate={e => (e.innerHTML = item.text)} />
         {item.kids &&
           item.kids.map(id => {
-            const item = model.items[id];
+            const item = state.items[id];
             return (
               item &&
               !item.deleted &&
-              <Comment collapsed={!!model.collapsed[item.id]} item={item} />
+              <Comment collapsed={!!state.collapsed[item.id]} item={item} />
             );
           })}
       </div>
@@ -55,11 +55,11 @@ export const itemView = (model, actions) => {
       <div class={classnames('comments', { hide: loading })}>
         {item.kids &&
           item.kids.map(id => {
-            const item = model.items[id];
+            const item = state.items[id];
             return (
               item &&
               !item.deleted &&
-              <Comment collapsed={!!model.collapsed[item.id]} item={item} />
+              <Comment collapsed={!!state.collapsed[item.id]} item={item} />
             );
           })}
       </div>
@@ -67,8 +67,8 @@ export const itemView = (model, actions) => {
     </section>;
 
   return (
-    <Container actions={actions} type={null} loading={model.loading}>
-      <section class="item centered" onCreate={onCreate}>
+    <Container actions={actions} type={null} loading={state.loading}>
+      <section class="item centered" oncreate={e => onCreate(e)}>
         {item && <Title item={item} loading={loading} />}
       </section>
     </Container>
