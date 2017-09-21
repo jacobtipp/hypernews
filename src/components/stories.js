@@ -1,8 +1,8 @@
-const { h } = require('hyperapp')
-const Container = require('./container')
-const Items = require('./items')
+import { h } from 'hyperapp';
+import { Container } from './container';
+import { Items } from './items';
 
-const Stories = module.exports = ({ items, ids, type, page, actions, loading }) => (
+export const Stories = ({ items, ids, type, page, actions, loading }) =>
   <Container loading={loading} actions={actions} type={type}>
     <Items
       loading={loading}
@@ -13,4 +13,3 @@ const Stories = module.exports = ({ items, ids, type, page, actions, loading }) 
       items={items}
     />
   </Container>
-)

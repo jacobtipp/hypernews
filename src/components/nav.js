@@ -1,21 +1,19 @@
-const { h } = require('hyperapp')
-const NavLink = require('./navlink')
-const links = ['top', 'new', 'show', 'ask', 'jobs']
+import { h } from 'hyperapp';
+import { NavLink } from './navlink';
 
-const Nav = module.exports = ({ loading, actions, type }) => {
-  return (  
-    <header>
-      <nav class='centered'>
-        {links.map(story => (
-          <NavLink 
-            type={type}
-            name={story}
-            actions={actions}
-            loading={loading}
-            active={`${type}s` === story || story === type}
-          />
-          ))}
-        </nav>
-      </header>
-  )
-}
+const links = ['top', 'new', 'show', 'ask', 'jobs'];
+
+export const Nav = ({ loading, actions, type }) =>
+  <header>
+    <nav class="centered">
+      {links.map(story =>
+        <NavLink
+          type={type}
+          name={story}
+          actions={actions}
+          loading={loading}
+          active={`${type}s` === story || story === type}
+        />
+      )}
+    </nav>
+  </header>
