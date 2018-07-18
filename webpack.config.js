@@ -20,7 +20,9 @@ module.exports = {
       loader: 'babel-loader',
     }, ],
   },
-
+  externals: {
+    firebase: 'firebase'
+  },
   target: 'web',
 
   devServer: {

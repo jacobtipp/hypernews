@@ -1,6 +1,4 @@
-import * as firebase from 'firebase/app';
-import 'firebase/storage';
-import 'firebase/database';
+import * as firebase from 'firebase';
 
 const config = {
   databaseURL: 'https://hacker-news.firebaseio.com'
