@@ -1,7 +1,7 @@
-const path = require('path')
-const ROOT = path.resolve(__dirname)
+const path = require('path');
+const ROOT = path.resolve(__dirname);
 
-module.exports = {
+const settings = {
   devtool: 'cheap-eval-source-map',
 
   entry: path.resolve(ROOT, 'src', 'main.js'),
@@ -9,7 +9,7 @@ module.exports = {
   output: {
     filename: 'bundle.js',
     publicPath: '/',
-    path: ROOT,
+    path: path.resolve(ROOT, 'public'),
   },
 
   module: {
@@ -24,11 +24,19 @@ module.exports = {
     firebase: 'firebase'
   },
   target: 'web',
-
-  devServer: {
-    port: 8088,
-    host: '0.0.0.0',
-    historyApiFallback: true,
-    contentBase: path.resolve(ROOT, 'public'),
-  },
+  mode: 'production'
 }
+
+if (process.env.NODE_ENV != 'production') {
+  Object.assign(settings, {
+    devtool: false,
+    devServer: {
+      port: 8088,
+      host: '127.0.0.1',
+      historyApiFallback: true,
+      contentBase: path.resolve(ROOT, 'public'),
+      disableHostCheck: true
+    }
+  })
+}
+module.exports = settings;
