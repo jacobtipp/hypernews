@@ -12,6 +12,7 @@
     "hyperapp",
     "hackernews"
   ],
+  "main": "src/main.js",
   "author": "",
   "license": "ISC",
   "dependencies": {
