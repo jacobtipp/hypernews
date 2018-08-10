@@ -3,32 +3,60 @@
   "version": "2.0.0",
   "description": "hacker news implementation with hyperapp",
   "scripts": {
-    "start": "npm run build && npm run serve",
-    "serve": "pushstate-server public 8080",
-    "build": "rollup -c",
-    "watch": "rollup -c -w",
-    "dev": "npm run serve & npm run watch"
+    "dev": "webpack-dev-server",
+    "build": "webpack",
+    "prestart": "npm run build",
+    "start": "webpack-dev-server --history-api-fallback public/ --open"
   },
   "keywords": [
     "hyperapp",
     "hackernews"
   ],
+  "main": "src/main.js",
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@hyperapp/router": "^0.2.3",
     "classnames": "^2.2.5",
-    "hyperapp": "^0.12.0",
-    "pushstate-server": "^2.2.1"
+    "hyperapp": "^0.12.0"
   },
   "devDependencies": {
+    "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
+    "babel-eslint": "^8.2.6",
+    "babel-loader": "^7.1.5",
+    "@babel/register": "^7.0.0-beta.39",
+    "babel-plugin-dynamic-import-webpack": "^1.0.2",
     "babel-plugin-external-helpers": "^6.22.0",
     "babel-plugin-transform-react-jsx": "^6.23.0",
+    "babel-preset-env": "^1.7.0",
     "babel-preset-es2015": "^6.24.1",
-    "rollup": "^0.47.6",
-    "rollup-plugin-babel": "^3.0.2",
-    "rollup-plugin-commonjs": "^8.1.0",
-    "rollup-plugin-node-resolve": "^3.0.0"
+    "css-loader": "^1.0.0",
+    "eslint": "^5.1.0",
+    "extract-text-webpack-plugin": "^3.0.2",
+    "firebase": "^5.2.0",
+    "html-webpack-plugin": "^3.2.0",
+    "webpack": "^4.16.1",
+    "webpack-cli": "^3.0.8",
+    "webpack-dev-server": "^3.1.4"
+  },
+  "babel": {
+    "presets": [
+      [
+        "env",
+        {
+          "module": false
+        }
+      ]
+    ],
+    "plugins": [
+      [
+        "transform-react-jsx",
+        {
+          "pragma": "h"
+        }
+      ],
+      "dynamic-import-webpack"
+    ]
   }
 }

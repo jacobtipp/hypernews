@@ -2,6 +2,10 @@ import { h } from 'hyperapp';
 import { listView } from './listView';
 import { itemView } from './itemView';
 
+const matchAll = () => {
+  return '404';
+}
+
 export const view = [
   ['/', listView('top')],
   ['/top', listView('top')],
@@ -15,5 +19,5 @@ export const view = [
   ['/jobs', listView('job')],
   ['/jobs/:page', listView('job')],
   ['/item/:id', itemView],
-  ['*', (model, actions) => <div>404</div>]
+  ['*', matchAll]
 ];
