@@ -1,4 +1,4 @@
-[deprecated]
+# [deprecated]
 
 # hypernews
 hackernews clone with hyperapp *[WIP]*
